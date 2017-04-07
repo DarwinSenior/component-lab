@@ -11,13 +11,16 @@ import {
 } from '@angular/core';
 import { ExperimentFactoryService } from '../services/experiment-factory';
 
+import { highlight, languages } from 'prismjs';
+
 @Component({
   selector: 'cl-renderer',
   template: `<div class="case" #caseContainer></div>
   <details *ngIf="source">
     <summary style="margin: 1em auto">Source</summary>
-    <pre>{{source}}</pre>
-  </details>`
+    <pre class="language-html"><code [innerHTML]="highlight(source)"></code></pre>
+  </details>`,
+  styleUrls: ['~prismjs/themes/prism.css']
 })
 export class RendererComponent implements OnDestroy {
   private _ref: ComponentRef<any>;
@@ -29,6 +32,10 @@ export class RendererComponent implements OnDestroy {
     private experimentRegistry: ExperimentRegistryService,
     private injector: Injector,
   ) { }
+
+  highlight(source: string){
+    return highlight(source, languages.html);
+  }
 
   private _cleanup() {
     if (this._ref) {

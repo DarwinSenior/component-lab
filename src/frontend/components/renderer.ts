@@ -20,7 +20,7 @@ import { highlight, languages } from 'prismjs';
     <summary style="margin: 1em auto">Source</summary>
     <pre class="language-html"><code [innerHTML]="highlight(source)"></code></pre>
   </details>`,
-  styleUrls: ['~prismjs/themes/prism.css']
+  styleUrls: ['../../../node_modules/prismjs/themes/prism.css']
 })
 export class RendererComponent implements OnDestroy {
   private _ref: ComponentRef<any>;

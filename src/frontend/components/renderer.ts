@@ -15,16 +15,27 @@ import { highlight, languages } from 'prismjs';
 
 @Component({
   selector: 'cl-renderer',
-  template: `<div class="case" #caseContainer></div>
-  <details *ngIf="source">
-    <summary style="margin: 1em auto">Source</summary>
-    <pre class="language-html"><code [innerHTML]="highlight(source)"></code></pre>
-  </details>`,
-  styleUrls: ['../../../node_modules/prismjs/themes/prism.css']
+  template: `
+<div class="case" #caseContainer></div>
+<details *ngIf="source">
+  <summary style="margin: 1em auto">Source</summary>
+  <pre class="language-html"><code [innerHTML]="highlight(source, 'html')"></code></pre>
+</details>
+<details *ngIf="style">
+  <summary style="margin: 1em auto">Source</summary>
+  <pre class="language-html"><code [innerHTML]="highlight(style, 'css')"></code></pre>
+</details>
+<details *ngIf="data">
+  <summary style="margin: 1em auto">Source</summary>
+  <pre class="language-html"><code [innerHTML]="highlight(context | json, 'json')"></code></pre>
+</details>
+`,
 })
 export class RendererComponent implements OnDestroy {
   private _ref: ComponentRef<any>;
   public source: string;
+  public context: Object;
+  public style: string;
   @ViewChild('caseContainer', { read: ViewContainerRef }) public caseContainer: ViewContainerRef;
 
   constructor(
@@ -33,8 +44,8 @@ export class RendererComponent implements OnDestroy {
     private injector: Injector,
   ) { }
 
-  highlight(source: string){
-    return highlight(source, languages.html);
+  highlight(source: string, language: string){
+    return highlight(source, languages['language']);
   }
 
   private _cleanup() {
@@ -52,6 +63,8 @@ export class RendererComponent implements OnDestroy {
     this._ref = this.caseContainer.createComponent(factory, 0, injector, []);
     const experimentCase = this.experimentRegistry.getExperimentCase(id);
     this.source = experimentCase.showSource ? experimentCase.template : '';
+    this.style = experimentCase.showSource ? experimentCase.styles.join('\n') : '';
+    this.context = experimentCase.showSource ? experimentCase.context : {};
   }
 
   ngOnDestroy() {

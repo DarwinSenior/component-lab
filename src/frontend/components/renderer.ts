@@ -25,11 +25,27 @@ import { highlight, languages } from 'prismjs';
   <summary style="margin: 1em auto">Source</summary>
   <pre class="language-html"><code [innerHTML]="highlight(style, 'css')"></code></pre>
 </details>
-<details *ngIf="data">
+<details *ngIf="context">
   <summary style="margin: 1em auto">Source</summary>
   <pre class="language-html"><code [innerHTML]="highlight(context | json, 'json')"></code></pre>
 </details>
 `,
+  styles: [`
+details{
+  transition: opacity 0.5s ease-in;
+  transition: max-height 0.5s ease-in;
+}
+details:not([open])>pre{
+  opacity: 0;
+  max-height: 0px;
+  overflow: hidden;
+}
+details[open]>pre{
+  opacity: 1;
+  max-height: 700px;
+  overflow: auto;
+}
+`]
 })
 export class RendererComponent implements OnDestroy {
   private _ref: ComponentRef<any>;
